@@ -1,0 +1,34 @@
+{$CLEO}
+0000: NOP
+repeat
+wait 100
+until samp.Available()
+0B34: samp register_client_command "cmd" to_label @cmd
+
+while true
+wait 0
+    if 31@ == 1
+    then
+    0B75: samp get_chat_string 99 text_to 2@ prefix_to 3@ color_to 4@ prefix_color_to -1
+    wait 0
+        if
+        0C18: 5@ = strstr string1 2@ string2 "123" // Чекает "123" в чате
+        then
+        0AF8: samp add_message_to_chat "ez nice" color -1 // Просто выводт в чат, не более    
+        end
+    end
+end
+
+:cmd
+0B12: 31@ = 31@ XOR 1
+if 31@ == 1 
+then
+0AC8: 2@ = allocate_memory_size 256
+0AC8: 3@ = allocate_memory_size 64
+0ACD: show_text_highpriority "~g~cleo for DM-server in ~r~ON~n~~w~Author:~p~ ~>~RB_PRO~<~" time 3000
+else
+0ACD: show_text_highpriority "~g~cleo for DM-server in ~r~OFF~n~~w~Author:~p~ ~>~RB_PRO~<~" time 3000
+free 2@
+free 3@
+end
+samp.CmdRet()
